@@ -102,7 +102,8 @@ export default class App extends React.Component {
         );
       case 'image':
         this.setState({ 
-          fullscreenImageId: id 
+          fullscreenImageId: id ,
+          isInputFocused: false
         }); 
       break; 
       default: break;
