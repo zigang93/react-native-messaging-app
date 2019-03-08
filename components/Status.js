@@ -3,12 +3,27 @@ import { Constants } from 'expo';
 import { NetInfo, Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
 import React, { Component } from 'react';
 
-
 class Status extends Component {
 
   state = { 
-    info: 'none',
+    info: null,
   }
+
+  async componentWillMount() {
+    this.subscription = NetInfo.addEventListener('connectionChange', this.handleChange);
+    const info = await NetInfo.getConnectionInfo();
+    this.setState({ info });
+    // testing offline
+    //setTimeout(() => this.handleChange('none'), 3000);
+  }
+
+  componentWillUnmount(){ 
+    this.subscription.remove();
+  }
+
+  handleChange=(info)=>{ 
+    this.setState({ info });
+  };
 
   render() {
 
