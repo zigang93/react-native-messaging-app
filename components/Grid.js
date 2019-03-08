@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Dimensions, FlatList, PixelRatio, StyleSheet } from 'react-native'
-
+import PropTypes from 'prop-types';
 export default class Grid extends Component {
 
   static propTypes = {
@@ -15,7 +15,7 @@ export default class Grid extends Component {
   };
 
   renderGridItem = (info) => {
-
+    const { index } = info;
     const { renderItem, numColumns, itemMargin } = this.props;
     const { width } = Dimensions.get('window');
 
@@ -30,7 +30,7 @@ export default class Grid extends Component {
     const marginTop = index < numColumns ? 0 : itemMargin;
 
     return renderItem({ ...info, size, marginLeft, marginTop });
-    
+
   };
 
   render() {
