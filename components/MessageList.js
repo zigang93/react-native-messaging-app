@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { MapView } from 'expo';
 import { MessageShape } from '../utils/MessageUtils';
+import PropTypes from 'prop-types';
 
 const keyExtractor = item => item.id.toString();
 
