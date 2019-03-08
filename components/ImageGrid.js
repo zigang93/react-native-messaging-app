@@ -58,7 +58,14 @@ export default class ImageGrid extends Component {
     };
 
     return (
-      <Image source={{ uri }} style={style} />
+      <TouchableOpacity
+        key={uri}
+        activeOpacity={0.75}
+        onPress={() => onPressImage(uri)}
+        style={style}
+      >
+        <Image source={{ uri }} style={styles.image} />
+      </TouchableOpacity>
     ); 
 
   };
