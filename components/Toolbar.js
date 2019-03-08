@@ -79,12 +79,11 @@ export default class Toolbar extends Component {
 
     return (
       <View style={styles.toolbar}>
-        {/* Use emojis for icons instead! */}
         <ToolbarButton 
-          title={'C'} 
+          title={'📸'} 
           onPress={onPressCamera} 
         /> 
-        <ToolbarButton title={'L'} onPress={onPressLocation} /> 
+        <ToolbarButton title={'📍'} onPress={onPressLocation} /> 
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input} 
