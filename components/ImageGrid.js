@@ -16,14 +16,37 @@ export default class ImageGrid extends Component {
     onPressImage: () => {},
   };
 
+  loading = false;
+  cursor = null;
+
   state = {
-    images: [
-      { uri: 'https://picsum.photos/600/600?image=10' },
-      { uri: 'https://picsum.photos/600/600?image=20' },
-      { uri: 'https://picsum.photos/600/600?image=30' },
-      { uri: 'https://picsum.photos/600/600?image=40' },
-    ],
+    images: [],
   }
+
+  componentDidMount() { 
+    this.getImages();
+  }
+
+  getImages = async (after) => {
+    if (this.loading) return;
+    this.loading = true;
+    
+    const results = await CameraRoll.getPhotos({ first: 20, after, });
+    const { edges, page_info: { has_next_page, end_cursor } } = results; 
+    const loadedImages = edges.map(item => item.node.image);
+    this.setState( {
+      images: this.state.images.concat(loadedImages), 
+      }, () => {
+        this.loading = false;
+        this.cursor = has_next_page ? end_cursor : null;
+      }, 
+    );
+  };
+
+  getNextImages = () => { 
+    if (!this.cursor) return;
+    this.getImages(this.cursor);
+  };
 
   renderItem = ({ item: { uri }, size, marginTop, marginLeft }) => { 
     
@@ -47,9 +70,11 @@ export default class ImageGrid extends Component {
       <Grid
         data={images} 
         renderItem={this.renderItem} 
-        keyExtractor={keyExtractor}
+        keyExtractor={keyExtractor} 
+        onEndReached={this.getNextImages}
       />
     )
+
   }
 }
 
