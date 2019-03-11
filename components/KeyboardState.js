@@ -53,6 +53,7 @@ export default class KeyboardState extends Component {
     this.setState({ 
       keyboardWillShow: true 
     });
+
     this.measure(event);
     
   };
@@ -62,6 +63,7 @@ export default class KeyboardState extends Component {
       keyboardWillShow: false,
       keyboardVisible: true, 
     });
+
     this.measure(event);
   
   };
@@ -73,15 +75,15 @@ export default class KeyboardState extends Component {
     this.measure(event);
   };
 
-  keyboardDidHide = (event) => { 
+  keyboardDidHide = () => { 
     this.setState({
       keyboardWillHide: false,
       keyboardVisible: false 
     });
-    this.measure(event);
+
   };
 
-  measure=(event)=>{
+  measure = (event)=>{
     const { layout } = this.props;
     const { 
       endCoordinates: { height, screenY }, 

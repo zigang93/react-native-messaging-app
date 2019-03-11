@@ -3,14 +3,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {       UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
 export const INPUT_METHOD = { 
   NONE: 'NONE',
   KEYBOARD: 'KEYBOARD', 
   CUSTOM: 'CUSTOM',
 };
-
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {       UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 class MessagingContainer extends Component {
 
@@ -39,19 +40,27 @@ class MessagingContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { onChangeInputMethod } = this.props;
-    if (!this.props.keyboardVisible && nextProps.keyboardVisible) { 
-      // Keyboard shown onChangeInputMethod(INPUT_METHOD.KEYBOARD);
+
+    if (!this.props.keyboardVisible && nextProps.keyboardVisible) {
+      // Keyboard shown
+      onChangeInputMethod(INPUT_METHOD.KEYBOARD);
     } else if (
       // Keyboard hidden
-      this.props.keyboardVisible && !nextProps.keyboardVisible && this.props.inputMethod !== INPUT_METHOD.CUSTOM
-    ) { 
+      this.props.keyboardVisible &&
+      !nextProps.keyboardVisible &&
+      this.props.inputMethod !== INPUT_METHOD.CUSTOM
+    ) {
       onChangeInputMethod(INPUT_METHOD.NONE);
     }
 
     const { keyboardAnimationDuration } = nextProps;
+
+    // Animate between states
     const animation = LayoutAnimation.create(
       keyboardAnimationDuration,
-      Platform.OS === 'android' ? LayoutAnimation.Types.easeInEaseOut : LayoutAnimation.Types.keyboard,
+      Platform.OS === 'android'
+        ? LayoutAnimation.Types.easeInEaseOut
+        : LayoutAnimation.Types.keyboard,
       LayoutAnimation.Properties.opacity,
     );
     LayoutAnimation.configureNext(animation);
@@ -61,7 +70,9 @@ class MessagingContainer extends Component {
     this.subscription = BackHandler.addEventListener('hardwareBackPress', () => {
       const { onChangeInputMethod, inputMethod } = this.props;
 
-      if (inputMethod === INPUT_METHOD.CUSTOM) { onChangeInputMethod(INPUT_METHOD.NONE); return true;
+      if (inputMethod === INPUT_METHOD.CUSTOM) { 
+        onChangeInputMethod(INPUT_METHOD.NONE); 
+        return true;
       }
       return false;
     });  
@@ -113,7 +124,7 @@ class MessagingContainer extends Component {
 
     // The keyboard is hidden and not transitioning up
     const keyboardIsHidden = inputMethod === INPUT_METHOD.NONE && !keyboardWillShow;
-    
+
     // The keyboard is visible and transitioning down
     const keyboardIsHiding = inputMethod === INPUT_METHOD.KEYBOARD && keyboardWillHide;
 
@@ -127,10 +138,10 @@ class MessagingContainer extends Component {
     return (
       <View style={containerStyle}>
         {children}
-      <View style={inputStyle}>
-        {renderInputMethodEditor()}
+        <View style={inputStyle}>
+          {renderInputMethodEditor()}
+        </View>
       </View>
-    </View>
     );
   }
 }
