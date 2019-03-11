@@ -111,6 +111,12 @@ class MessagingContainer extends Component {
     // hardware keyboard is connected, so let's set `keyboardHeight` to `250`
     // in this case.
 
+    // The keyboard is hidden and not transitioning up
+    const keyboardIsHidden = inputMethod === INPUT_METHOD.NONE && !keyboardWillShow;
+    
+    // The keyboard is visible and transitioning down
+    const keyboardIsHiding = inputMethod === INPUT_METHOD.KEYBOARD && keyboardWillHide;
+
     const inputStyle = {
       height: showCustomInput ? keyboardHeight || 250 : 0,
       // Show extra space if the device is an iPhone X the keyboard is not visible
